@@ -1,6 +1,7 @@
 {
   "name": "initiativetracker2",
   "private": true,
+  "homepage": "https://zenithcoder0.github.io/initiative-tracker-2/",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
