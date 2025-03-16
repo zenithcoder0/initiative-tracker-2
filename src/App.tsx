@@ -35,6 +35,14 @@ const App = () => {
     setDeadCharacters([...deadCharacters, character]); // Move to dead list
   };
 
+  const reviveCharacter = (index) => {
+    const revived = deadCharacters[index];
+    revived.health = revived.maxHealth; // Restore full health
+  
+    setDeadCharacters(deadCharacters.filter((_, i) => i !== index));
+    setInitiativeArray([...initiativeArray, revived].sort((a, b) => b.initiative - a.initiative));
+  };
+  
   const addMultiInitiative = () => {
     if (!multiName.trim()) return alert("Please enter a name.");
     if (!multiModifier && !multiManualInitiative)
@@ -137,52 +145,52 @@ const App = () => {
       )}
 
       {/* Initiative Display */}
-      <Box 
-  sx={{ 
-    display: "flex", 
-    gap: 2, 
-    overflowX: "auto", 
-    p: 2, 
-    whiteSpace: "nowrap", 
-    maxWidth: "100%",
-  }}
->
-  {initiativeArray.map((char, idx) => ( // ✅ Rename `index` to `idx`
-    <Box 
-      key={idx} 
-      sx={{ 
-        textAlign: "center", 
-        flexShrink: 0, 
-        cursor: "pointer", 
-        border: selectedCharacter === idx ? "2px solid blue" : "none", 
-        borderRadius: "8px",
-        padding: "5px",
-      }}
-      onClick={() => handleAvatarClick(idx)} // ✅ Now correctly uses `idx`
-    >
-      {/* Initiative Number (Now Clickable) */}
-      <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-        {char.initiative}
-      </Typography>
-      
-      {/* Character Avatar */}
-      <HealthAvatar name={char.name} health={char.health} maxHealth={char.maxHealth} />
-      
-      {/* Remove Button for Dead Characters */}
-      {char.health <= 0 && (
-        <Button 
-          variant="contained" 
-          color="error" 
-          size="small" 
-          sx={{ mt: 1 }} 
-          onClick={() => removeCharacter(idx)} // ✅ Fix: Pass `idx`
-        >
-          Remove
-        </Button>
-      )}
-    </Box>
-  ))}
-</Box>
+      <Box
+        sx={{
+          display: "flex",
+          gap: 2,
+          overflowX: "auto",
+          p: 2,
+          whiteSpace: "nowrap",
+          maxWidth: "100%",
+        }}
+      >
+        {initiativeArray.map((char, idx) => ( // ✅ Rename `index` to `idx`
+          <Box
+            key={idx}
+            sx={{
+              textAlign: "center",
+              flexShrink: 0,
+              cursor: "pointer",
+              border: selectedCharacter === idx ? "2px solid blue" : "none",
+              borderRadius: "8px",
+              padding: "5px",
+            }}
+            onClick={() => handleAvatarClick(idx)} // ✅ Now correctly uses `idx`
+          >
+            {/* Initiative Number (Now Clickable) */}
+            <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+              {char.initiative}
+            </Typography>
+
+            {/* Character Avatar */}
+            <HealthAvatar name={char.name} health={char.health} maxHealth={char.maxHealth} />
+
+            {/* Remove Button for Dead Characters */}
+            {char.health <= 0 && (
+              <Button
+                variant="contained"
+                color="error"
+                size="small"
+                sx={{ mt: 1 }}
+                onClick={() => removeCharacter(idx)} // ✅ Fix: Pass `idx`
+              >
+                Remove
+              </Button>
+            )}
+          </Box>
+        ))}
+      </Box>
 
 
       {/* Health Adjustment */}
@@ -210,13 +218,55 @@ const App = () => {
       {deadCharacters.length > 0 && (
         <Box sx={{ mt: 4 }}>
           <Typography variant="h6">Fallen Characters</Typography>
-          <Box sx={{ display: "flex", gap: 2, overflowX: "auto", p: 2 }}>
-            {deadCharacters.map((char, index) => (
-              <HealthAvatar key={index} name={char.name} health={0} maxHealth={char.maxHealth} />
+
+          {/* ✅ Scrollable Horizontal Layout */}
+          <Box
+            sx={{
+              display: "flex",
+              gap: 2,
+              overflowX: "auto", // ✅ Enables scrolling
+              p: 2,
+              whiteSpace: "nowrap", // ✅ Prevents wrapping
+              maxWidth: "100%",
+            }}
+          >
+            {deadCharacters.map((char, idx) => (
+              <Box
+                key={idx}
+                sx={{
+                  textAlign: "center",
+                  flexShrink: 0,
+                  cursor: "pointer", // ✅ Make them clickable
+                  opacity: 0.6, // ✅ Faded effect for dead characters
+                  border: "2px solid red", // ✅ Visual indicator of death
+                  borderRadius: "8px",
+                  padding: "5px",
+                }}
+              >
+                {/* Initiative Number (if needed) */}
+                <Typography variant="h6" sx={{ fontWeight: "bold", color: "red" }}>
+                  {char.initiative}
+                </Typography>
+
+                {/* Dead Character Avatar */}
+                <HealthAvatar name={char.name} health={0} maxHealth={char.maxHealth} />
+
+                {/* (Optional) Revival Button */}
+                <Button
+                  variant="contained"
+                  color="warning"
+                  size="small"
+                  sx={{ mt: 1 }}
+                  onClick={() => reviveCharacter(idx)} // ✅ Optional revive logic
+                >
+                  Revive
+                </Button>
+              </Box>
             ))}
           </Box>
         </Box>
       )}
+
 
       {/* Initiative Entry Form */}
       {showForm && (
