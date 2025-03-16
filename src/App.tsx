@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, JSXElementConstructor, ReactElement, ReactNode, ReactPortal } from "react";
 import { Container, Typography, TextField, Button, Box } from "@mui/material";
 import HealthAvatar from "./HealthAvatar"; // Adjust path if needed
 
@@ -8,14 +8,17 @@ const App = () => {
     return savedData ? JSON.parse(savedData) : [];
   });
 
-  const [deadCharacters, setDeadCharacters] = useState([]);
+  const [deadCharacters, setDeadCharacters] = useState<{ 
+    name: string; initiative: number; health: number; maxHealth: number;
+  }[]>([]);
+  
   const [multiName, setMultiName] = useState("");
   const [multiManualInitiative, setMultiManualInitiative] = useState("");
   const [multiModifier, setMultiModifier] = useState("");
   const [multiCount, setMultiCount] = useState("");
   const [multiHealth, setMultiHealth] = useState("");
 
-  const [selectedCharacter, setSelectedCharacter] = useState(null);
+  const [selectedCharacter, setSelectedCharacter] = useState<number | null>(null);
   const [healthChange, setHealthChange] = useState("");
   const [showForm, setShowForm] = useState(true);
   const [roundCount, setRoundCount] = useState(1);
@@ -29,20 +32,20 @@ const App = () => {
 
   const rollInitiative = () => Math.floor(Math.random() * 20) + 1;
 
-  const removeCharacter = (index) => {
+  const removeCharacter = (index: number) => {
     const character = initiativeArray[index];
-    setInitiativeArray(initiativeArray.filter((_, i) => i !== index));
+    setInitiativeArray(initiativeArray.filter((_: any, i: any) => i !== index));
     setDeadCharacters([...deadCharacters, character]); // Move to dead list
   };
 
-  const reviveCharacter = (index) => {
-    const revived = deadCharacters[index];
-    revived.health = revived.maxHealth; // Restore full health
-  
-    setDeadCharacters(deadCharacters.filter((_, i) => i !== index));
-    setInitiativeArray([...initiativeArray, revived].sort((a, b) => b.initiative - a.initiative));
-  };
-  
+const reviveCharacter = (index: number) => {
+  const revived = deadCharacters[index];
+  revived.health = revived.maxHealth; // Restore full health
+
+  setDeadCharacters(deadCharacters.filter((_, i) => i !== index));
+  setInitiativeArray([...initiativeArray, revived].sort((a, b) => b.initiative - a.initiative));
+};
+
   const addMultiInitiative = () => {
     if (!multiName.trim()) return alert("Please enter a name.");
     if (!multiModifier && !multiManualInitiative)
@@ -71,9 +74,10 @@ const App = () => {
     setMultiHealth("");
   };
 
-  const handleAvatarClick = (index) => {
+  const handleAvatarClick = (index: number) => {
     setSelectedCharacter((prev) => (prev === index ? null : index));
   };
+  
 
   const applyHealthChange = () => {
     if (selectedCharacter === null) return;
@@ -155,7 +159,7 @@ const App = () => {
           maxWidth: "100%",
         }}
       >
-        {initiativeArray.map((char, idx) => ( // ✅ Rename `index` to `idx`
+        {initiativeArray.map((char: { initiative: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; name: string; health: number; maxHealth: number; }, idx: number) => ( // ✅ Rename `index` to `idx`
           <Box
             key={idx}
             sx={{
