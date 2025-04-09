@@ -1,8 +1,10 @@
-Disclaimer, Hello! 
-If by chance you stumble upon this tool feel free to use it. 
-This is purely a tool that I smashed together with AI and some revision for gaming purposes. 
-I won't take credit for this workload as my own skill.
+Hello there! 👋
+If you’ve stumbled upon this tool, feel free to use it — it was built with the tabletop gaming community in mind.
 
-I hope this tool helps you manage you're combat initiative and you can focus on your gameplay. 
-Feel free to fork this and create your own revisions. 
-Thank you.
+This project is something I quickly put together using a mix of AI assistance and personal iteration. 
+I won’t claim it as a demonstration of expert-level skill, but rather as a learning tool and a small utility that grew out of passion for gaming and experimentation with code.
+
+I hope it helps you manage your combat initiative so you can focus more on enjoying the game.
+Feel free to fork it, improve it, or completely remix it — make it your own!
+
+Thanks for checking it out
